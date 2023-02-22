@@ -15,7 +15,11 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const login = async (username, password) => {
-    const response = await api.login(username, password)
+    const response = await api.login({
+      body: JSON.stringify({
+        user: { username: username, password: password } 
+      })
+    })
 
     if (response.ok) {
       const data = await response.json()
@@ -30,14 +34,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    const response = await api.logout({ Authorization: authToken })
+    const response = await api.authenticated(api.logout, authToken)()
 
-    if (response.ok) {
-      setUser(null);
-      setAuthToken(null)
-      navigate("/", { replace: true });
-    } else {
-      throw new Error(`Logging out failed. Response status: ${response.status}`)
+    setUser(null);
+    setAuthToken(null)
+    navigate("/", { replace: true });
+
+    if (!response.ok) {
+      console.error(`Logging out failed. Response status: ${response.status}`)
     }
   };
 

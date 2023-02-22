@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigate, useLocation } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -10,9 +9,7 @@ const LoginPage = ({}) => {
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [submitting, setSubmitting] = React.useState(false)
-  const navigate = useNavigate();
-  const { user, login } = useAuth();
-  const { state } = useLocation();
+  const { login } = useAuth();
   
   const onUsernameChange = (event) => {
     setUsername(event.target.value)

@@ -5,11 +5,11 @@ export const HomeLayout = () => {
   const { user } = useAuth();
 
   if (user) {
-    return <Navigate to="/app/planets" />;
+    return <Navigate to="/app" />;
   }
 
   return (
-    <div>
+    <div id="container">
       <Outlet />
     </div>
   )
