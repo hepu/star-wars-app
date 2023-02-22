@@ -13,17 +13,13 @@ import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import PlanetsPage from './pages/PlanetsPage';
 import PlanetPage from './pages/PlanetPage';
+import EditPlanetPage from './pages/EditPlanetPage';
+import NewPlanetPage from './pages/NewPlanetPage';
 import ErrorPage from "./pages/ErrorPage";
 
 import './App.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: true,
-    },
-  },
-})
+const queryClient = new QueryClient()
 
 function App() {
   return (
@@ -37,7 +33,9 @@ function App() {
           <Route path='/app' element={<ProtectedLayout />}>
             <Route path="/app" element={<DashboardPage />} />
             <Route path="/app/planets" element={<PlanetsPage />} />
+            <Route path="/app/planets/new" element={<NewPlanetPage />} />
             <Route path="/app/planets/:id" element={<PlanetPage />} />
+            <Route path="/app/planets/:id/edit" element={<EditPlanetPage />} />
           </Route>
           <Route path="*" element={<ErrorPage />}/>
         </Route>

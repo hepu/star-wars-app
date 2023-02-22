@@ -55,6 +55,11 @@ export default {
   },
   jsonResponse: async (requestFn, options) => {
     const response = await requestFn(options)
+    
+    if (!response.ok) {
+      throw new Error(`API error. Response status: ${response.status}`)
+    }
+    
     return await response.json()
   },
   login: async (options) => await postRequest('/login', options),
@@ -62,5 +67,8 @@ export default {
   planets: {
     get: async (options) => await request('/planets', options),
     show: async (options) => await request(`/planets/:id`, options),
+    create: async (options) => await postRequest(`/planets`, options),
+    update: async (options) => await putRequest(`/planets/:id`, options),
+    destroy: async (options) => await deleteRequest(`/planets/:id`, options)
   }
 }

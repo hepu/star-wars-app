@@ -1,21 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import {
   useQuery,
 } from 'react-query'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
+import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
 
 import { useAuth } from '../../hooks/useAuth'
 import api from '../../lib/api'
 
 const PlanetsPage = ({}) => {
-  const { authToken } = useAuth()
-  const { isLoading, isError, data, error } = useQuery('planets', () => api.jsonResponse(api.authenticated(api.planets.get, authToken)))
-
-  return (
-    <div id="planets">
-      <h2>Planets</h2>
-      <Table striped bordered hover>
+  const { authToken, logout } = useAuth()
+  const navigate = useNavigate();
+  const { isLoading, isError, data, error } = useQuery('planets', () => api.jsonResponse(api.authenticated(api.paginated(api.planets.get, {per_page: 100}), authToken)))
+  
+  const onNew = () => {
+    navigate('/app/planets/new')
+  }
+  
+  const renderTable = useCallback(() => {
+    return (
+      <Table striped hover>
         <thead>
           <tr>
             <th>#</th>
@@ -33,6 +39,22 @@ const PlanetsPage = ({}) => {
           })}
         </tbody>
       </Table>
+    )
+  }, [data])
+
+  return (
+    <div id="planets">
+      <h2>Planets</h2>
+      <div className='mt-3 d-flex flex-column'>
+        {!isLoading && (
+          <div className="text-end">
+            <Button variant='primary' onClick={onNew}>
+              New Planet
+            </Button>
+          </div>
+        )}
+        {isLoading ? <Spinner animation="border" variant="primary" className="align-self-center" /> : renderTable()}
+      </div>
     </div>
   )
 }
