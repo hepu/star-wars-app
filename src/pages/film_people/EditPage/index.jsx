@@ -77,11 +77,11 @@ const EditPage = ({}) => {
     <div id={RESOURCE.plural}>
       <Breadcrumb>
         <Breadcrumb.Item href={`/app/${RESOURCE.plural}`}>
-          Films
+          Film People
         </Breadcrumb.Item>
-        <Breadcrumb.Item active>{initialAttributes?.title}</Breadcrumb.Item>
+        <Breadcrumb.Item active>{id}</Breadcrumb.Item>
       </Breadcrumb>
-      <h2>Film: {initialAttributes?.title}</h2>
+      <h2>Film People: {id}</h2>
       <Form>
         <Table variant='dark' striped bordered hover>
           <thead>

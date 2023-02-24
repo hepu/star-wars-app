@@ -4,7 +4,7 @@ import {
   useQueryClient,
   useMutation
 } from 'react-query'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
@@ -14,50 +14,38 @@ import Button from 'react-bootstrap/Button';
 import { useAuth } from '../../../hooks/useAuth'
 import api from '../../../lib/api'
 
-import { RESOURCE } from '../constants'
+import { RESOURCE, DEFAULT_ATTRIBUTES } from '../constants'
 
-const EditPage = ({}) => {
+const NewPage = ({}) => {
   const { authToken } = useAuth()
   const navigate = useNavigate()
-  let { id } = useParams();
   const queryClient = useQueryClient()
-  const { isLoading, isError, data, error } = useQuery([RESOURCE.singular, id], () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].show, authToken), { pathParams: { id } }))
-  const [attributes, setAttributes] = useState({})
+  const [attributes, setAttributes] = useState(DEFAULT_ATTRIBUTES)
   
-  const initialAttributes = useMemo(() => {
-    const completeAttributes = data?.data?.attributes
-
-    delete completeAttributes.id
-    delete completeAttributes.created
-    delete completeAttributes.edited
-
-    return completeAttributes
-  }, [data?.data?.attributes])
-  
-  const updateMutation = useMutation({
+  const createMutation = useMutation({
     mutationFn: (newItem) => {
       return api.authenticated(
-        api[RESOURCE.plural].update, authToken
+        api[RESOURCE.plural].create, authToken
       )(
         {
-          pathParams: { id },
           body: JSON.stringify({ [RESOURCE.singular]: newItem })
         }
       )
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [RESOURCE.singular, id] })
+    onSuccess: async (data) => {
       queryClient.invalidateQueries({ queryKey: [RESOURCE.plural] })
+      const json = await data.json()
+
+      navigate(`/app/${RESOURCE.plural}/${json.data.id}`);
     },
   })
   
   const onCancel = () => {
-    navigate(`/app/${RESOURCE.plural}/${id}`);
+    navigate(`/app/${RESOURCE.plural}`);
   }
   
-  const onUpdate = () => {
-    updateMutation.mutate(attributes)
-    navigate(`/app/${RESOURCE.plural}/${id}`);
+  const onCreate = () => {
+    createMutation.mutate(attributes)
   }
   
   const onAttributeChange = (attributeName) => {
@@ -68,20 +56,16 @@ const EditPage = ({}) => {
       })
     }
   }
-  
-  useEffect(() => {
-    setAttributes(initialAttributes)
-  }, [initialAttributes])
 
   return (
     <div id={RESOURCE.plural}>
       <Breadcrumb>
         <Breadcrumb.Item href={`/app/${RESOURCE.plural}`}>
-          Films
+          Film Planets
         </Breadcrumb.Item>
-        <Breadcrumb.Item active>{initialAttributes?.title}</Breadcrumb.Item>
+        <Breadcrumb.Item active>New Film Planet</Breadcrumb.Item>
       </Breadcrumb>
-      <h2>Film: {initialAttributes?.title}</h2>
+      <h2>New Film Planet</h2>
       <Form>
         <Table variant='dark' striped bordered hover>
           <thead>
@@ -107,8 +91,8 @@ const EditPage = ({}) => {
           <Button variant='link' className='mx-2' onClick={onCancel}>
             Cancel
           </Button>
-          <Button variant='primary' onClick={onUpdate}>
-            Update
+          <Button variant='primary' onClick={onCreate}>
+            Create
           </Button>
         </div>
       </Form>
@@ -116,4 +100,4 @@ const EditPage = ({}) => {
   )
 }
 
-export default EditPage
+export default NewPage

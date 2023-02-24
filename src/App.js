@@ -9,6 +9,7 @@ import HomeLayout from "./components/HomeLayout";
 import AuthLayout from "./components/AuthLayout";
 
 import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 
@@ -27,6 +28,16 @@ import FilmPage from './pages/films/ShowPage';
 import EditFilmPage from './pages/films/EditPage';
 import NewFilmPage from './pages/films/NewPage';
 
+import FilmPlanetsPage from './pages/film_planets/IndexPage';
+import FilmPlanetPage from './pages/film_planets/ShowPage';
+import EditFilmPlanetPage from './pages/film_planets/EditPage';
+import NewFilmPlanetPage from './pages/film_planets/NewPage';
+
+import FilmPeoplePage from './pages/film_people/IndexPage';
+import FilmPersonPage from './pages/film_people/ShowPage';
+import EditFilmPersonPage from './pages/film_people/EditPage';
+import NewFilmPersonPage from './pages/film_people/NewPage';
+
 import ErrorPage from "./pages/ErrorPage";
 
 import './App.css';
@@ -41,6 +52,7 @@ function App() {
           <Route element={<HomeLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
           </Route>
           <Route path='/app' element={<ProtectedLayout />}>
             <Route path="/app" element={<DashboardPage />} />
@@ -59,6 +71,16 @@ function App() {
             <Route path="/app/films/new" element={<NewFilmPage />} />
             <Route path="/app/films/:id" element={<FilmPage />} />
             <Route path="/app/films/:id/edit" element={<EditFilmPage />} />
+
+            <Route path="/app/film_planets" element={<FilmPlanetsPage />} />
+            <Route path="/app/film_planets/new" element={<NewFilmPlanetPage />} />
+            <Route path="/app/film_planets/:id" element={<FilmPlanetPage />} />
+            <Route path="/app/film_planets/:id/edit" element={<EditFilmPlanetPage />} />
+
+            <Route path="/app/film_people" element={<FilmPeoplePage />} />
+            <Route path="/app/film_people/new" element={<NewFilmPersonPage />} />
+            <Route path="/app/film_people/:id" element={<FilmPersonPage />} />
+            <Route path="/app/film_people/:id/edit" element={<EditFilmPersonPage />} />
           </Route>
           <Route path="*" element={<ErrorPage />}/>
         </Route>

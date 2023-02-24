@@ -14,6 +14,26 @@ export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useLocalStorage("authToken", null);
   const navigate = useNavigate();
 
+  const signup = async (email, username, password) => {
+    const response = await api.signup({
+      body: JSON.stringify({
+        user: { email: email, username: username, password: password } 
+      })
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      setUser(data);
+      setAuthToken(response.headers.get('Authorization'))
+      navigate("/app");
+    } else {
+      setUser(null);
+      setAuthToken(null)
+      console.error(`Sign up failed. Response status: ${response.status}`)
+      throw new Error('Sign up failed.')
+    }
+  };
+
   const login = async (username, password) => {
     const response = await api.login({
       body: JSON.stringify({
@@ -51,9 +71,10 @@ export const AuthProvider = ({ children }) => {
       user,
       login,
       logout,
+      signup,
       authToken
     }),
-    [user, login, logout]
+    [user, login, logout, signup]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

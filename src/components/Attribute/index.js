@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { DATE_ATTRS, ENTITY_TYPE_PLURALS } from './constants'
 
-const Attribute = ({name, value, metadata = [], metadataValueKey = 'name'}) => {
+const Attribute = ({name, value, metadata = [], metadataValueKey = 'name', foreignEntityType}) => {
   const entity = useMemo(() => {
     return name.split('_id')[0]
   }, [name])
@@ -32,7 +32,7 @@ const Attribute = ({name, value, metadata = [], metadataValueKey = 'name'}) => {
 
   if (isForeignKey) {
     const foreignEntity = metadata.find((includedEntity) => {
-      return parseInt(includedEntity.id) == parseInt(value) && includedEntity.type == entity
+      return parseInt(includedEntity.id) == parseInt(value) && includedEntity.type == (foreignEntityType || entity)
     })
     
     if (!foreignEntity) { return value }

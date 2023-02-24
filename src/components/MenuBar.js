@@ -16,6 +16,10 @@ const MenuBar = () => {
   const onLogin = async () => {
     navigate('/login')
   }
+
+  const onSignup = async () => {
+    navigate('/signup')
+  }
   
   const onLogout = async () => {
     await logout()
@@ -34,6 +38,8 @@ const MenuBar = () => {
                 <Nav.Link href="/app/films">Films</Nav.Link>
                 <Nav.Link href="/app/people">People</Nav.Link>
                 <Nav.Link href="/app/planets">Planets</Nav.Link>
+                <Nav.Link href="/app/film_planets">Film Planets</Nav.Link>
+                <Nav.Link href="/app/film_people">Film People</Nav.Link>
               </>
             )}
           </Nav>
@@ -46,9 +52,14 @@ const MenuBar = () => {
                 </Button>
               </>
             ) : (
-              <Button variant="primary" type="submit" onClick={onLogin}>
-                Log In
-              </Button>
+              <>
+                <Button className='me-2' variant="primary" type="submit" onClick={onLogin}>
+                  Log In
+                </Button>
+                <Button variant="secondary" type="submit" onClick={onSignup}>
+                  Signup
+                </Button>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>

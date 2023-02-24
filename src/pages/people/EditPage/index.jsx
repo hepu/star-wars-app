@@ -37,11 +37,11 @@ const EditPage = ({}) => {
   const updateMutation = useMutation({
     mutationFn: (newItem) => {
       return api.authenticated(
-        api.planets.update, authToken
+        api[RESOURCE.plural].update, authToken
       )(
         {
           pathParams: { id },
-          body: JSON.stringify({ planet: newItem })
+          body: JSON.stringify({ [RESOURCE.singular]: newItem })
         }
       )
     },

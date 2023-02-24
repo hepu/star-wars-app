@@ -8,12 +8,17 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { useAuth } from "../../hooks/useAuth";
 
-const LoginPage = ({}) => {
+const SignupPage = ({}) => {
+  const [email, setEmail] = React.useState('')
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [submitting, setSubmitting] = React.useState(false)
   const [error, setError] = React.useState(null)
-  const { login } = useAuth();
+  const { signup } = useAuth();
+  
+  const onEmailChange = (event) => {
+    setEmail(event.target.value)
+  }
   
   const onUsernameChange = (event) => {
     setUsername(event.target.value)
@@ -28,7 +33,7 @@ const LoginPage = ({}) => {
     setError(null)
     setSubmitting(true)
     try {
-      await login(username, password)
+      await signup(email, username, password)
     } catch (e) {
       setError(e)
       console.error(e)
@@ -50,6 +55,9 @@ const LoginPage = ({}) => {
                 Star Wars
               </Link>
             </h2>
+            <h5 className='text-dark text-center'>
+              Sign Up
+            </h5>
             {error && (
               <Alert variant='danger'>
                 {error.message}
@@ -57,6 +65,16 @@ const LoginPage = ({}) => {
             )}
             <Form action="/" onSubmit={onSubmit}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label className='text-dark'>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={onEmailChange}
+                  required={true}
+                  disabled={submitting}/>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Label className='text-dark'>Username</Form.Label>
                 <Form.Control
                   type="input"
@@ -88,7 +106,7 @@ const LoginPage = ({}) => {
                     className="me-2"
                   />
                 )}
-                Log In
+                Sign Up
               </Button>
             </Form>
           </Modal.Body>
@@ -98,4 +116,4 @@ const LoginPage = ({}) => {
   )
 }
 
-export default LoginPage
+export default SignupPage
