@@ -29,7 +29,8 @@ export const AuthProvider = ({ children }) => {
     } else {
       setUser(null);
       setAuthToken(null)
-      throw new Error(`Authentication failed. Response status: ${response.status}`)
+      console.error(`Authentication failed. Response status: ${response.status}`)
+      throw new Error('Authentication failed.')
     }
   };
 

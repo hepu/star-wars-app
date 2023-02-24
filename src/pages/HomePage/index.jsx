@@ -1,22 +1,18 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+
+import MenuBar from '../../components/MenuBar'
 
 import './home.css'
 
 const HomePage = ({}) => {
-  const navigate = useNavigate()
-
-  const onLogin = async () => {
-    navigate('/login')
-  }
-
   return (
     <div id="home">
-      Home
-      <Button variant="primary" type="submit" onClick={onLogin}>
-        Log In
-      </Button>
+      <MenuBar />
+      <Container>
+        
+      </Container>
     </div>
   )
 }

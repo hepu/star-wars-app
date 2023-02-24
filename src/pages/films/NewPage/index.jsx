@@ -11,45 +11,37 @@ import Table from 'react-bootstrap/Table';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
 
-import { useAuth } from '../../hooks/useAuth'
-import api from '../../lib/api'
+import { useAuth } from '../../../hooks/useAuth'
+import api from '../../../lib/api'
 
-const NewPlanetPage = ({}) => {
+import { RESOURCE, DEFAULT_ATTRIBUTES } from '../constants'
+
+const NewPage = ({}) => {
   const { authToken } = useAuth()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const [attributes, setAttributes] = useState({
-    climate: '',
-    diameter: '',
-    gravity: '',
-    name: '',
-    orbital_period: '',
-    population: '',
-    rotation_period: '',
-    surface_water: '',
-    terrain: ''
-  })
+  const [attributes, setAttributes] = useState(DEFAULT_ATTRIBUTES)
   
   const createMutation = useMutation({
-    mutationFn: (newPlanet) => {
+    mutationFn: (newItem) => {
       return api.authenticated(
-        api.planets.create, authToken
+        api[RESOURCE.plural].create, authToken
       )(
         {
-          body: JSON.stringify({ planet: newPlanet })
+          body: JSON.stringify({ [RESOURCE.singular]: newItem })
         }
       )
     },
     onSuccess: async (data) => {
-      queryClient.invalidateQueries({ queryKey: ['planets'] })
+      queryClient.invalidateQueries({ queryKey: [RESOURCE.plural] })
       const json = await data.json()
 
-      navigate(`/app/planets/${json.data.attributes.id}`);
+      navigate(`/app/${RESOURCE.plural}/${json.data.attributes.id}`);
     },
   })
   
   const onCancel = () => {
-    navigate(`/app/planets`);
+    navigate(`/app/${RESOURCE.plural}`);
   }
   
   const onCreate = () => {
@@ -66,16 +58,16 @@ const NewPlanetPage = ({}) => {
   }
 
   return (
-    <div id="planets">
+    <div id={RESOURCE.plural}>
       <Breadcrumb>
-        <Breadcrumb.Item href="/app/planets">
-          Planets
+        <Breadcrumb.Item href={`/app/${RESOURCE.plural}`}>
+          Films
         </Breadcrumb.Item>
-        <Breadcrumb.Item active>New Planet</Breadcrumb.Item>
+        <Breadcrumb.Item active>New Film</Breadcrumb.Item>
       </Breadcrumb>
-      <h2>New Planet</h2>
+      <h2>New Film</h2>
       <Form>
-        <Table striped bordered hover>
+        <Table variant='dark' striped bordered hover>
           <thead>
             <tr>
               <th>Attribute</th>
@@ -85,7 +77,7 @@ const NewPlanetPage = ({}) => {
           <tbody>
             {attributes && Object.keys(attributes).map((attribute) => {
               return (
-                <tr key={`planet-attr-${attribute}`}>
+                <tr key={`${RESOURCE.singular}-attr-${attribute}`}>
                   <td>{attribute}</td>
                   <td>
                     <Form.Control type="input" value={attributes[attribute]} onChange={onAttributeChange(attribute)}/>
@@ -108,4 +100,4 @@ const NewPlanetPage = ({}) => {
   )
 }
 
-export default NewPlanetPage
+export default NewPage

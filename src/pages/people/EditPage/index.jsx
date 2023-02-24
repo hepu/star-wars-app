@@ -11,15 +11,17 @@ import Table from 'react-bootstrap/Table';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
 
-import { useAuth } from '../../hooks/useAuth'
-import api from '../../lib/api'
+import { useAuth } from '../../../hooks/useAuth'
+import api from '../../../lib/api'
 
-const EditPlanetPage = ({}) => {
+import { RESOURCE } from '../constants'
+
+const EditPage = ({}) => {
   const { authToken } = useAuth()
   const navigate = useNavigate()
   let { id } = useParams();
   const queryClient = useQueryClient()
-  const { isLoading, isError, data, error } = useQuery(['planet', id], () => api.jsonResponse(api.authenticated(api.planets.show, authToken), { pathParams: { id } }))
+  const { isLoading, isError, data, error } = useQuery([RESOURCE.singular, id], () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].show, authToken), { pathParams: { id } }))
   const [attributes, setAttributes] = useState({})
   
   const initialAttributes = useMemo(() => {
@@ -33,29 +35,29 @@ const EditPlanetPage = ({}) => {
   }, [data?.data?.attributes])
   
   const updateMutation = useMutation({
-    mutationFn: (newPlanet) => {
+    mutationFn: (newItem) => {
       return api.authenticated(
         api.planets.update, authToken
       )(
         {
           pathParams: { id },
-          body: JSON.stringify({ planet: newPlanet })
+          body: JSON.stringify({ planet: newItem })
         }
       )
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['planet', id] })
-      queryClient.invalidateQueries({ queryKey: ['planets'] })
+      queryClient.invalidateQueries({ queryKey: [RESOURCE.singular, id] })
+      queryClient.invalidateQueries({ queryKey: [RESOURCE.plural] })
     },
   })
   
   const onCancel = () => {
-    navigate(`/app/planets/${id}`);
+    navigate(`/app/${RESOURCE.plural}/${id}`);
   }
   
   const onUpdate = () => {
     updateMutation.mutate(attributes)
-    navigate(`/app/planets/${id}`);
+    navigate(`/app/${RESOURCE.plural}/${id}`);
   }
   
   const onAttributeChange = (attributeName) => {
@@ -72,16 +74,16 @@ const EditPlanetPage = ({}) => {
   }, [initialAttributes])
 
   return (
-    <div id="planets">
+    <div id={RESOURCE.plural}>
       <Breadcrumb>
-        <Breadcrumb.Item href="/app/planets">
-          Planets
+        <Breadcrumb.Item href={`/app/${RESOURCE.plural}`}>
+          People
         </Breadcrumb.Item>
         <Breadcrumb.Item active>{initialAttributes?.name}</Breadcrumb.Item>
       </Breadcrumb>
-      <h2>Planet: {initialAttributes?.name}</h2>
+      <h2>Person: {initialAttributes?.name}</h2>
       <Form>
-        <Table striped bordered hover>
+        <Table variant='dark' striped bordered hover>
           <thead>
             <tr>
               <th>Attribute</th>
@@ -91,7 +93,7 @@ const EditPlanetPage = ({}) => {
           <tbody>
             {attributes && Object.keys(attributes).map((attribute) => {
               return (
-                <tr key={`planet-attr-${attribute}`}>
+                <tr key={`${RESOURCE.singular}-attr-${attribute}`}>
                   <td>{attribute}</td>
                   <td>
                     <Form.Control type="input" value={attributes[attribute]} onChange={onAttributeChange(attribute)}/>
@@ -114,4 +116,4 @@ const EditPlanetPage = ({}) => {
   )
 }
 
-export default EditPlanetPage
+export default EditPage
