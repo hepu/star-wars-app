@@ -8,7 +8,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { useAuth } from "../../hooks/useAuth";
 
-const SignupPage = ({}) => {
+const SignupPage = () => {
   const [email, setEmail] = React.useState('')
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')

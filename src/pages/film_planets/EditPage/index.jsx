@@ -5,7 +5,6 @@ import {
   useMutation
 } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
@@ -16,12 +15,12 @@ import api from '../../../lib/api'
 
 import { RESOURCE } from '../constants'
 
-const EditPage = ({}) => {
+const EditPage = () => {
   const { authToken } = useAuth()
   const navigate = useNavigate()
   let { id } = useParams();
   const queryClient = useQueryClient()
-  const { isLoading, isError, data, error } = useQuery([RESOURCE.singular, id], () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].show, authToken), { pathParams: { id } }))
+  const { data } = useQuery([RESOURCE.singular, id], () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].show, authToken), { pathParams: { id } }))
   const [attributes, setAttributes] = useState({})
   
   const initialAttributes = useMemo(() => {

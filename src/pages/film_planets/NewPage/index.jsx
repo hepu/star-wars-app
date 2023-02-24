@@ -1,11 +1,9 @@
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
-  useQuery,
   useQueryClient,
   useMutation
 } from 'react-query'
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
@@ -16,7 +14,7 @@ import api from '../../../lib/api'
 
 import { RESOURCE, DEFAULT_ATTRIBUTES } from '../constants'
 
-const NewPage = ({}) => {
+const NewPage = () => {
   const { authToken } = useAuth()
   const navigate = useNavigate()
   const queryClient = useQueryClient()

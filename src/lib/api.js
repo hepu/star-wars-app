@@ -9,7 +9,6 @@ const DEFAULT_HEADERS = {
 
 export function request(path, options = {}) {
   let queryParams = ""
-  let pathParams = {}
   let newPath = path
 
   if (options.queryParams) {

@@ -3,7 +3,7 @@ import { useAuth } from '../../hooks/useAuth'
 
 import './dashboard.css'
 
-const DashboardPage = ({}) => {
+const DashboardPage = () => {
   const {user} = useAuth()
   
   return (

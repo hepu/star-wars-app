@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import {
   useQuery,
 } from 'react-query'
@@ -13,10 +13,10 @@ import api from '../../../lib/api'
 
 import { RESOURCE } from '../constants'
 
-const IndexPage = ({}) => {
-  const { authToken, logout } = useAuth()
+const IndexPage = () => {
+  const { authToken } = useAuth()
   const navigate = useNavigate();
-  const { isLoading, isError, data, error } = useQuery(RESOURCE.plural, () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].get, authToken)))
+  const { isLoading, data } = useQuery(RESOURCE.plural, () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].get, authToken)))
   
   const onNew = () => {
     navigate(`/app/${RESOURCE.plural}/new`)

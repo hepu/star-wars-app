@@ -5,7 +5,6 @@ import {
   useQueryClient
 } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
@@ -17,12 +16,12 @@ import api from '../../../lib/api'
 
 import { RESOURCE } from '../constants'
 
-const ShowPage = ({}) => {
+const ShowPage = () => {
   const { authToken } = useAuth()
   const navigate = useNavigate();
   const queryClient = useQueryClient()
   let { id } = useParams();
-  const { isLoading, isError, data, error } = useQuery([RESOURCE.singular, id], () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].show, authToken), { pathParams: { id } }))
+  const { isLoading, data } = useQuery([RESOURCE.singular, id], () => api.jsonResponse(api.authenticated(api[RESOURCE.plural].show, authToken), { pathParams: { id } }))
   const [attributes, setAttributes] = useState({})
 
   const initialAttributes = useMemo(() => {
@@ -68,8 +67,8 @@ const ShowPage = ({}) => {
                     name={attribute}
                     metadata={data?.included}
                     value={attributes[attribute]}
-                    metadataValueKey={attribute == 'film_id' ? 'title' : undefined}
-                    foreignEntityType={attribute == 'people_id' ? 'person' : undefined}/>
+                    metadataValueKey={attribute === 'film_id' ? 'title' : undefined}
+                    foreignEntityType={attribute === 'people_id' ? 'person' : undefined}/>
                 </td>
               </tr>
             )

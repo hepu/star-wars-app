@@ -24,15 +24,15 @@ const Attribute = ({name, value, metadata = [], metadataValueKey = 'name', forei
   
   const currentValue = useMemo(() => {
     return valueExtractor(name, value)
-  }, [value, valueExtractor])
+  }, [name, value, valueExtractor])
   
   const foreignValueExtractor = useCallback((foreignEntity, key) => {
     return valueExtractor(key, foreignEntity.attributes[key])
-  }, [])
+  }, [valueExtractor])
 
   if (isForeignKey) {
     const foreignEntity = metadata.find((includedEntity) => {
-      return parseInt(includedEntity.id) == parseInt(value) && includedEntity.type == (foreignEntityType || entity)
+      return parseInt(includedEntity.id) === parseInt(value) && includedEntity.type === (foreignEntityType || entity)
     })
     
     if (!foreignEntity) { return value }
